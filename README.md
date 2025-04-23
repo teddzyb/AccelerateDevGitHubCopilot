@@ -57,3 +57,28 @@ The project is organized as follows:
 
    ```sh
    git clone <repository-url>
+   ```
+
+2. Navigate to the project directory:
+
+   ```sh
+   cd AccelerateDevGitHubCopilot
+   ```
+
+3. Build the solution:
+
+   ```sh
+   dotnet build
+   ```
+
+4. Run the console application:
+
+   ```sh
+   dotnet run --project src/Library.Console
+   ```
+
+5. Follow the on-screen instructions to interact with the library system.
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
