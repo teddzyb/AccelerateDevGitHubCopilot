@@ -16,36 +16,20 @@ public class JsonLoanRepository : ILoanRepository
     {
         await _jsonData.EnsureDataLoaded();
 
-        foreach (Loan loan in _jsonData.Loans!)
-        {
-            if (loan.Id == id)
-            {
-                Loan populated = _jsonData.GetPopulatedLoan(loan);
-                return populated;
-            }
-        }
-        return null;
+        return _jsonData.Loans!
+          .Where(loan => loan.Id == id)
+          .Select(loan => _jsonData.GetPopulatedLoan(loan))
+          .FirstOrDefault();
     }
 
     public async Task UpdateLoan(Loan loan)
     {
-        Loan? existingLoan = null;
-        foreach (Loan l in _jsonData.Loans!)
-        {
-            if (l.Id == loan.Id)
-            {
-                existingLoan = l;
-                break;
-            }
-        }
+        var existingLoan = _jsonData.Loans!.FirstOrDefault(l => l.Id == loan.Id);
 
         if (existingLoan != null)
         {
-            existingLoan.BookItemId = loan.BookItemId;
-            existingLoan.PatronId = loan.PatronId;
-            existingLoan.LoanDate = loan.LoanDate;
-            existingLoan.DueDate = loan.DueDate;
-            existingLoan.ReturnDate = loan.ReturnDate;
+            _jsonData.Loans!.Remove(existingLoan);
+            _jsonData.Loans!.Add(loan);
 
             await _jsonData.SaveLoans(_jsonData.Loans!);
 
